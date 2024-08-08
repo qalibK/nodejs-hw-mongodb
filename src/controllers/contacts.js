@@ -1,4 +1,4 @@
-import { getContacts, getContactById } from './services/contacts.js';
+import { getContacts, getContactById } from '../services/contacts.js';
 import {
   createContact,
   deleteContact,
