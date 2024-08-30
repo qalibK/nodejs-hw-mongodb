@@ -43,7 +43,7 @@ router.delete(
 );
 router.put(
   '/:contactId',
-  checkRoles(ROLES.ADMIN),
+  checkRoles(ROLES.ADMIN, ROLES.USER),
   isValidId,
   validateBody(updateContactSchema),
   ctrlWrapper(upsertContactController),

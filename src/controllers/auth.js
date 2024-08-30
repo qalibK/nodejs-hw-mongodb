@@ -6,7 +6,7 @@ import {
 } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
 
-export const registerUserController = async (req, res, next) => {
+export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
   res.status(201).json({
     status: 201,
@@ -15,7 +15,7 @@ export const registerUserController = async (req, res, next) => {
   });
 };
 
-export const loginUserController = async (req, res, next) => {
+export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
 
   res.cookie('refreshToken', session.refreshToken, {

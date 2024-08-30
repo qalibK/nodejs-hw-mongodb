@@ -1,4 +1,5 @@
 import createHttpError from 'http-errors';
+
 import { ContactsCollection } from '../db/models/contact.js';
 import { ROLES } from '../constants/index.js';
 
@@ -12,21 +13,21 @@ export const checkRoles =
     }
 
     const { role } = user;
-    if (roles.includes(ROLES.USER) && role === ROLES.USER) {
+
+    if (roles.includes(ROLES.ADMIN) && role === ROLES.ADMIN) {
       next();
       return;
     }
 
-    if (roles.includes(ROLES.ADMIN) && role === ROLES.ADMIN) {
+    if (roles.includes(ROLES.USER) && role === ROLES.USER) {
       const { contactId } = req.params;
       if (!contactId) {
         next(createHttpError(403));
         return;
       }
-
       const contact = await ContactsCollection.findOne({
         _id: contactId,
-        user: user._id,
+        userId: user._id,
       });
 
       if (contact) {

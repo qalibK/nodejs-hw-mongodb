@@ -9,7 +9,7 @@ import {
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
 
-export const getContactsController = async (req, res, next) => {
+export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
@@ -29,7 +29,7 @@ export const getContactsController = async (req, res, next) => {
   });
 };
 
-export const getContactByIdController = async (req, res, next) => {
+export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
 
@@ -45,7 +45,7 @@ export const getContactByIdController = async (req, res, next) => {
 };
 
 export const createContactController = async (req, res, next) => {
-  const { name, phoneNumber, email, isFavourite, contactType } = req.body;
+  const { name, phoneNumber, contactType } = req.body;
 
   if (!name || !phoneNumber || !contactType) {
     return next(

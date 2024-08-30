@@ -8,7 +8,7 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     role: {
       type: String,
-      enum: [ROLES.USER, ROLES.ADMIN],
+      enum: [ROLES.ADMIN, ROLES.USER],
       default: ROLES.USER,
     },
   },
@@ -16,9 +16,9 @@ const userSchema = new Schema(
 );
 
 userSchema.methods.toJSON = function () {
-  const user = this.toObject();
-  delete user.password;
-  return user;
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
 };
 
 export const UsersCollection = model('users', userSchema);
