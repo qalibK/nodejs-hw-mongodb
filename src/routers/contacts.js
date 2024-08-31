@@ -21,7 +21,11 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 const router = Router();
 
 router.use(authenticate);
-router.get('/', checkRoles(ROLES.ADMIN), ctrlWrapper(getContactsController));
+router.get(
+  '/',
+  checkRoles(ROLES.ADMIN, ROLES.USER),
+  ctrlWrapper(getContactsController),
+);
 
 router.get(
   '/:contactId',
@@ -31,13 +35,13 @@ router.get(
 );
 router.post(
   '/',
-  checkRoles(ROLES.ADMIN),
+  checkRoles(ROLES.ADMIN, ROLES.USER),
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 router.delete(
   '/:contactId',
-  checkRoles(ROLES.ADMIN),
+  checkRoles(ROLES.ADMIN, ROLES.USER),
   isValidId,
   ctrlWrapper(deleteContactController),
 );
