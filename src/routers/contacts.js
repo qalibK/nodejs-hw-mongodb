@@ -2,8 +2,7 @@ import { Router } from 'express';
 import { isValidId } from '../middlewares/isValidId.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { authenticate } from '../middlewares/authenticate.js';
-import { checkRoles } from '../middlewares/checkRoles.js';
-import { ROLES } from '../constants/index.js';
+
 import {
   createContactSchema,
   updateContactSchema,
@@ -23,38 +22,38 @@ const router = Router();
 router.use(authenticate);
 router.get(
   '/',
-  checkRoles(ROLES.ADMIN, ROLES.USER),
+
   ctrlWrapper(getContactsController),
 );
 
 router.get(
   '/:contactId',
-  checkRoles(ROLES.ADMIN, ROLES.USER),
+
   isValidId,
   ctrlWrapper(getContactByIdController),
 );
 router.post(
   '/',
-  checkRoles(ROLES.ADMIN, ROLES.USER),
+
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 router.delete(
   '/:contactId',
-  checkRoles(ROLES.ADMIN, ROLES.USER),
+
   isValidId,
   ctrlWrapper(deleteContactController),
 );
 router.put(
   '/:contactId',
-  checkRoles(ROLES.ADMIN, ROLES.USER),
+
   isValidId,
   validateBody(updateContactSchema),
   ctrlWrapper(upsertContactController),
 );
 router.patch(
   '/:contactId',
-  checkRoles(ROLES.ADMIN, ROLES.USER),
+
   isValidId,
   ctrlWrapper(patchContactController),
 );
