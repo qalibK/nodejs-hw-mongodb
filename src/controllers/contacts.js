@@ -8,6 +8,9 @@ import {
   updateContact,
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { env } from '../utils/env.js';
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -114,6 +117,17 @@ export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const userId = req.user._id;
   const { name, phoneNumber, email, isFavourite, contactType } = req.body;
+  const photo = req.file;
+
+  let photoUrl;
+
+  if (photo) {
+    if (env('ENABLE_CLOUDINARY') === true) {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
 
   if (
     !name &&
@@ -132,6 +146,7 @@ export const patchContactController = async (req, res, next) => {
     req.body,
     { upsert: true },
     userId,
+    { photo: photoUrl },
   );
 
   if (!result) {
