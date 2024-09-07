@@ -122,7 +122,7 @@ export const patchContactController = async (req, res, next) => {
   let photoUrl;
 
   if (photo) {
-    if (env('ENABLE_CLOUDINARY') === true) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
       photoUrl = await saveFileToCloudinary(photo);
     } else {
       photoUrl = await saveFileToUploadDir(photo);
@@ -143,10 +143,12 @@ export const patchContactController = async (req, res, next) => {
 
   const result = await updateContact(
     contactId,
-    req.body,
+    {
+      ...req.body,
+      photo: photoUrl,
+    },
     { upsert: true },
     userId,
-    { photo: photoUrl },
   );
 
   if (!result) {
