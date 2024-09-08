@@ -5,8 +5,10 @@ import {
   refreshUsersSession,
   requestResetToken,
   resetPassword,
+  loginOrSignupWithGoogle,
 } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
+import { generateAuthUrl } from '../utils/googleOAuth2.js';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -49,6 +51,8 @@ export const logoutUserController = async (req, res) => {
   res.status(204).send();
 };
 
+// Session controllers
+
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
@@ -77,6 +81,8 @@ export const refreshUserSessionController = async (req, res) => {
   });
 };
 
+// Reset password controllers
+
 export const requestResetTokenController = async (req, res) => {
   await requestResetToken(req.body.email);
   res.json({
@@ -92,5 +98,31 @@ export const resetPasswordController = async (req, res) => {
     message: 'Password was successfully reset!',
     status: 200,
     data: {},
+  });
+};
+
+// OAuth controllers ( GOOGLE )
+
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  res.json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
+  });
+};
+
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSignupWithGoogle(req.body.code);
+  setupSession(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: {
+      accessToken: session.accessToken,
+    },
   });
 };
