@@ -4,7 +4,7 @@ import createHttpError from 'http-errors';
 import { readFile } from 'fs/promises';
 import { env } from './env.js';
 
-const PATH_JSON = path.join(process.cwd(), 'src', 'constants', 'google.json');
+const PATH_JSON = path.join(process.cwd(), 'google-oauth.json');
 
 const oauthConfig = JSON.parse(await readFile(PATH_JSON));
 
